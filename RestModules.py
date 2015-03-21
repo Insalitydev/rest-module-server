@@ -34,7 +34,8 @@ def not_allowed(e):
 
 @app.before_request
 def log():
-	logging.info("%s: %s, Data: %s" % (request.method, request.url, request.data))
+	if (len(request.data) > 0):
+		logging.info("%s: %s, Data: %s" % (request.method, request.url, request.data))
 
 
 if __name__ == "__main__":
