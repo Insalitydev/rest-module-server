@@ -28,6 +28,10 @@ app = Flask(__name__)
 def page_not_found(e):
 	return("[Error]: Wrong API request")
 
+@app.errorhandler(405)
+def not_allowed(e):
+	return("[Error]: 405 Method not allowed")
+
 @app.before_request
 def log():
 	logging.info("%s: %s, Data: %s" % (request.method, request.url, request.data))
