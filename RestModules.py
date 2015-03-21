@@ -1,6 +1,13 @@
 # coding: utf-8
 
+'''
+Основной файл модуля RestModules
+Доступные аргументы:
+l - записывает все логи в файл log/RestModules.log вместо стандартного вывода
+'''
+
 import os
+import sys
 import logging
 from flask import Flask, request
 from flask.views import MethodView
@@ -11,10 +18,6 @@ if (cur_dir == ""):
 	cur_dir = "."
 
 modules_dir = "modules"
-
-logging.basicConfig(filename=cur_dir+"/log/RestModules.log", level=logging.INFO,
-					format = '[%(asctime)s] %(levelname)s: %(message)s',
-					datefmt = '%Y-%m-%d %I:%M:%S')
 
 app = Flask(__name__)
 
@@ -31,6 +34,20 @@ def log():
 
 
 if __name__ == "__main__":
+	try:
+		arg = sys.argv[1]
+	except IndexError:
+		arg = ""
+
+	filename = None
+	if ("l" in arg):
+		filename=cur_dir+"/log/RestModules.log"
+
+	logging.basicConfig(filename=filename, level=logging.INFO,
+					format = '[%(asctime)s] %(levelname)s: %(message)s',
+					datefmt = '%Y-%m-%d %I:%M:%S')
+
+
 	full_modules_dir = cur_dir + "/" + modules_dir
 	modules_list = [ name for name in os.listdir(full_modules_dir) if os.path.isdir(os.path.join(full_modules_dir, name)) ]
 

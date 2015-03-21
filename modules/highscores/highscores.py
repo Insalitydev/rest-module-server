@@ -3,7 +3,12 @@
 import json
 import pymongo
 from datetime import datetime
-from ._secret import USERNAME, PASSWORD
+
+# RELATIVE IMPORT HACK
+if __name__=="__main__":
+	from _secret import USERNAME, PASSWORD
+else:
+	from ._secret import USERNAME, PASSWORD
 
 
 def get_connection_records():
@@ -16,6 +21,12 @@ records = get_connection_records()
 keys = ["Username", "Score"]
 
 def send_score(username, score):
+	# Asserting value types
+	if (not type(username) is str) or\
+		(not type(score) is int):
+		return "[Error]: Value type errors" 
+
+	# Posting scores
 	cur_date = datetime.now().strftime("%H:%M:%S %d.%m.%Y")
 
 	record = records.find_one({"Username": username})
@@ -41,7 +52,7 @@ def get_score(username):
 def get_top():
 	top = records.find().sort("Score", -1)
 	top_list = []
-	for rec in top.limit(5):
+	for rec in top.limit(10):
 		new_rec = { key: rec[key] for key in keys}
 		top_list.append(new_rec)
 
@@ -50,4 +61,4 @@ def get_top():
 
 if __name__=="__main__":
 	# print(get_top())
-	print(send_score("Reatiz", 2400))
+	print(send_score("Imba", "10000"))
