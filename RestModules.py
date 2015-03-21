@@ -12,7 +12,8 @@ if (cur_dir == ""):
 
 modules_dir = "modules"
 
-logging.basicConfig(filename=cur_dir+"/log/RestModules.log", level=logging.INFO,
+# filename=cur_dir+"/log/RestModules.log"
+logging.basicConfig(level=logging.INFO,
 					format = '[%(asctime)s] %(levelname)s: %(message)s',
 					datefmt = '%Y-%m-%d %I:%M:%S')
 
@@ -39,7 +40,8 @@ if __name__ == "__main__":
 			a = __import__("%s.%s.main" % (modules_dir, module))
 			b = getattr(a, module)
 			b.main.setup_routes(app)
-		except (AttributeError, ImportError):
+		except (AttributeError, ImportError) as e:
+			logging.error("Error %s" % e)
 			logging.error("Module %s is incorrect, removing from module list..." % module)
 			modules_list.remove(module)
 
