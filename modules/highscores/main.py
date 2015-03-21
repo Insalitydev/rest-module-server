@@ -24,8 +24,8 @@ class UserAPI(MethodView):
 			if not key in data:
 				return "Wrong JSON keys"
 
-		highscores.send_score(data["Username"], data["Score"])
-		return "Success posting scores"
+		send_result = highscores.send_score(data["Username"], data["Score"])
+		return send_result
 
 
 def setup_routes(flask_app):

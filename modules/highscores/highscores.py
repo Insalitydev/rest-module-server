@@ -3,7 +3,7 @@
 import json
 import pymongo
 from datetime import datetime
-from _secret import USERNAME, PASSWORD
+from ._secret import USERNAME, PASSWORD
 
 
 def get_connection_records():
