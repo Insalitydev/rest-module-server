@@ -2,10 +2,9 @@
 
 import json
 import logging
-from . import settings
-from . import highscores
 from flask import request
 from flask.views import MethodView
+from . import settings, highscores
 
 class UserAPI(MethodView):
 	def get(self, username=None):
@@ -18,11 +17,11 @@ class UserAPI(MethodView):
 		try:
 			data = json.loads(request.data.decode("utf-8"))
 		except ValueError:
-			return "Wrong JSON data"
+			return "[Error]: Wrong JSON data"
 
 		for key in keys:
 			if not key in data:
-				return "Wrong JSON keys"
+				return "[Error]: Wrong JSON keys"
 
 		send_result = highscores.send_score(data["Username"], data["Score"])
 		return send_result
