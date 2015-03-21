@@ -24,7 +24,7 @@ class UserAPI(MethodView):
 			if not key in data:
 				return "Wrong JSON keys"
 
-		highscores.send_scores(data["Username"], data["Score"])
+		highscores.send_score(data["Username"], data["Score"])
 		return "Success posting scores"
 
 
