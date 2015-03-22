@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<title>Генератор названий</title>
+
+	<style type="text/css">
+	#Text {
+		margin-top: 50px;
+		text-align: center;
+		color:#ececec;
+	}
+	#Title{
+		text-align: center;
+		color:#ececec;
+		font-size: 400%;
+	}
+	.btn-group{
+		margin-top: 20px;
+	}
+	body {background: url("http://subtlepatterns.com/patterns/dark_embroidery.png")}
+	</style>
+
+</head>
+<body>
+	<div class="container">
+		<div class="span9 text-center">
+			<h1 id="Title">Генератор названий</h1>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default">Item</button>
+				<button type="button" class="btn btn-default">Creature</button>
+				<button type="button" class="btn btn-default">Boss</button>
+				<button type="button" class="btn btn-default">Location</button>
+			</div>
+
+			<h1><div id="Text">Нажми кнопку выше!</div></h1>
+		</div>
+	</div>
+
+	<script>
+		$('.btn').on('click', function(){
+			request = $(this).text();
+			url = document.URL + '/' + request;
+			$.ajax({ url: url}).done(function(data){
+				$("#Text").text(data);
+			});
+		});
+	</script>
+</body>
+</html>

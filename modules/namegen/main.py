@@ -5,13 +5,14 @@ import logging
 from . import Tags
 from . import settings
 from . import PhraseGen
-from flask import request
+from flask import request, render_template
 from flask.views import MethodView
 
 class UserAPI(MethodView):
 	def get(self, tag=None):
 		if tag is None:
-			return PhraseGen.generate_phrase(tag)
+			return render_template('index.html')
+			# return PhraseGen.generate_phrase(tag)
 		else:
 			if (tag in Tags.Tags):
 				return PhraseGen.generate_phrase(tag)
