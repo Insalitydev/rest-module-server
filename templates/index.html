@@ -10,8 +10,11 @@
 	#Text {
 		margin-top: 50px;
 		text-align: center;
-		color:#ececec;
+		color:#8c8c8c;
 		white-space: pre-wrap;
+	}
+	#Text::first-line {
+		color: #ececec;
 	}
 	#Title{
 		text-align: center;
@@ -49,7 +52,10 @@
 				phrases.splice(0, 0, data);
 				phrases = phrases.slice(0, 7);
 
-				$("#Text").text(phrases.join("\n\n"));
+				new_phrases = phrases.slice();
+				new_phrases[0] = new_phrases[0];
+
+				$("#Text").text(new_phrases.join("\n\n"));
 			});
 		});
 	</script>
