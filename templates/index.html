@@ -11,6 +11,7 @@
 		margin-top: 50px;
 		text-align: center;
 		color:#ececec;
+		white-space: pre-wrap;
 	}
 	#Title{
 		text-align: center;
@@ -40,11 +41,15 @@
 	</div>
 
 	<script>
+		phrases = []
 		$('.btn').on('click', function(){
 			request = $(this).text();
 			url = document.URL + '/' + request;
 			$.ajax({ url: url}).done(function(data){
-				$("#Text").text(data);
+				phrases.splice(0, 0, data);
+				phrases = phrases.slice(0, 7);
+
+				$("#Text").text(phrases.join("\n\n"));
 			});
 		});
 	</script>
