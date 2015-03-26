@@ -16,7 +16,7 @@ class UserAPI(MethodView):
 
 def setup_routes(flask_app):
 	user_view = UserAPI.as_view("app_name")
-	flask_app.add_url_rule("/app_route" % settings.MODULE_ROUTE, view_func=user_view)
+	flask_app.add_url_rule("/app_route", view_func=user_view)
 ```
 
 ### Запуск
