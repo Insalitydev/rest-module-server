@@ -2,13 +2,16 @@
 
 import json
 import pymongo
+
 from datetime import datetime
 
 # RELATIVE IMPORT HACK
 if __name__=="__main__":
 	from _secret import USERNAME, PASSWORD
+	from utils import hash_highscore
 else:
 	from ._secret import USERNAME, PASSWORD
+	from .utils import hash_highscore
 
 
 def get_connection_records():
@@ -20,11 +23,15 @@ def get_connection_records():
 records = get_connection_records()
 keys = ["Username", "Score"]
 
-def send_score(username, score):
+def send_score(username, score, key):
 	# Asserting value types
 	if (not type(username) is str) or\
 		(not type(score) is int):
 		return "[Error]: Value type errors" 
+
+	# Need to assert key
+	if (key != hash_highscore(username, score)):
+		return "[Error]: Wrong secret key"
 
 	# Posting scores
 	cur_date = datetime.now().strftime("%H:%M:%S %d.%m.%Y")

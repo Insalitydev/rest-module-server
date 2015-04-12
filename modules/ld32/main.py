@@ -6,14 +6,14 @@ from flask import request
 from flask.views import MethodView
 from . import settings, highscores
 
-class UserAPI(MethodView):
+class HighscoreAPI(MethodView):
 	def get(self, username=None):
 		if username is None:
 			return highscores.get_top()
 		else:
 			return highscores.get_score(username)
 	def post(self):
-		keys = ["Username", "Score"]
+		keys = ["Username", "Score", "Key"]
 		try:
 			data = json.loads(request.data.decode("utf-8"))
 		except ValueError:
@@ -23,14 +23,14 @@ class UserAPI(MethodView):
 			if not key in data:
 				return "[Error]: Wrong JSON keys"
 
-		send_result = highscores.send_score(data["Username"], data["Score"])
+		send_result = highscores.send_score(data["Username"], data["Score"], data["Key"])
 		return send_result
 
 
 def setup_routes(flask_app):
 	logging.info("Start setup module %s" % settings.MODULE_NAME)
 
-	user_view = UserAPI.as_view(settings.MODULE_ROUTE)
-	flask_app.add_url_rule("/%s" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET", "POST",])
-	flask_app.add_url_rule("/%s/" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET", "POST",])
-	flask_app.add_url_rule("/%s/<string:username>" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET", ])
+	user_view = HighscoreAPI.as_view(settings.MODULE_ROUTE)
+	flask_app.add_url_rule("/%s/highscore" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET", "POST",])
+	flask_app.add_url_rule("/%s/highscore/" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET", "POST",])
+	flask_app.add_url_rule("/%s/highscore/<string:username>" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET", ])
