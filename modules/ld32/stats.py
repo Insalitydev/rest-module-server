@@ -2,65 +2,65 @@
 
 import json
 import pymongo
+
 from datetime import datetime
 
 # RELATIVE IMPORT HACK
 if __name__=="__main__":
 	from _secret import USERNAME, PASSWORD
+	from utils import hash_stats
 else:
 	from ._secret import USERNAME, PASSWORD
+	from .utils import hash_stats
 
 
-def get_connection_records():
+def get_connection_stats():
 	client = pymongo.MongoClient("mongodb://%s:%s@ds029630.mongolab.com:29630/ludumdare32" % (USERNAME, PASSWORD))
 	db = client.ludumdare32
-	records = db['records']
-	return records
+	stats = db['stats']
+	return stats
 
-records = get_connection_records()
-keys = ["Username", "Score"]
+stats = get_connection_stats()
+keys = ["Username", "Score", "Mode", "Gold", "Playtime", "IsWin"]
 
-def send_score(username, score, key):
+def send_stats(username, score, mode, gold, playtime, is_win, key):
 	# Asserting value types
+	# Mode: 0 - Softcore, 1 - Hardcore
 	if (not type(username) is str) or\
-		(not type(score) is int):
+		(not type(score) is int) or\
+		(not type(key) is str) or\
+		(not type(mode) is int) or\
+		(not type(gold) is int) or\
+		(not type(playtime) is int) or\
+		(not type(is_win) is int):
 		return "[Error]: Value type errors" 
 
 	# Need to assert key
+	if (key != hash_stats(username, score, mode, gold, playtime, is_win)):
+		return "[Error]: Wrong secret key"
+
+
+	if username == "": username = "Unnamed"
 
 	# Posting scores
 	cur_date = datetime.now().strftime("%H:%M:%S %d.%m.%Y")
 
-	record = records.find_one({"Username": username})
-	if (record != None ):
-		if (record["Score"] < score):
-			records.remove(record)
-			records.insert({"Username": username, "Score": score, "Date": cur_date})
-			return "[OK]: Score updated on User %s" % record["Username"]
-		else:
-			return "[OK]: Score is not updated. Score is not highscore on User %s" % record["Username"]
-	else:
-		records.insert({"Username": username, "Score": score, "Date": cur_date})
-		return "[OK]: Score created on User %s" % username
+	stats.insert({"Username": username, "Score": score, "Mode": mode, "Date": cur_date, "Gold": gold, "Playtime": playtime, "IsWin": is_win})
+	return "[OK]: Stats recorded on User %s" % username
 
-def get_score(username):
-	rec = records.find_one({"Username": username})
-	if rec == None:
+
+def get_stats(username):
+	user_stats = stats.find({"Username": username})
+	if user_stats == None:
 		return "{}"
 
-	new_rec = { key: rec[key] for key in keys}
-	return json.dumps( new_rec )
-
-def get_top():
-	top = records.find().sort("Score", -1)
-	top_list = []
-	for rec in top.limit(10):
-		new_rec = { key: rec[key] for key in keys}
-		top_list.append(new_rec)
-
-	return json.dumps( top_list )
+	result = []
+	for stat in user_stats:
+		new_stat = { key: stat[key] for key in keys}
+		result.append(new_stat)
+	return json.dumps( result )
 
 
 if __name__=="__main__":
-	# print(get_top())
-	print(send_score("Imba", "10000"))
+	print(get_stats("Hard"))
+
