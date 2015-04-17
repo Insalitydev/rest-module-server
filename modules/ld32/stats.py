@@ -1,0 +1,66 @@
+# coding: utf-8
+
+import json
+import pymongo
+
+from datetime import datetime
+
+# RELATIVE IMPORT HACK
+if __name__=="__main__":
+	from _secret import USERNAME, PASSWORD
+	from utils import hash_stats
+else:
+	from ._secret import USERNAME, PASSWORD
+	from .utils import hash_stats
+
+
+def get_connection_stats():
+	client = pymongo.MongoClient("mongodb://%s:%s@ds029630.mongolab.com:29630/ludumdare32" % (USERNAME, PASSWORD))
+	db = client.ludumdare32
+	stats = db['stats']
+	return stats
+
+stats = get_connection_stats()
+keys = ["Username", "Score", "Mode", "Gold", "Playtime", "IsWin"]
+
+def send_stats(username, score, mode, gold, playtime, is_win, key):
+	# Asserting value types
+	# Mode: 0 - Softcore, 1 - Hardcore
+	if (not type(username) is str) or\
+		(not type(score) is int) or\
+		(not type(key) is str) or\
+		(not type(mode) is int) or\
+		(not type(gold) is int) or\
+		(not type(playtime) is int) or\
+		(not type(is_win) is int):
+		return "[Error]: Value type errors" 
+
+	# Need to assert key
+	if (key != hash_stats(username, score, mode, gold, playtime, is_win)):
+		return "[Error]: Wrong secret key"
+
+
+	if username == "": username = "Unnamed"
+
+	# Posting scores
+	cur_date = datetime.now().strftime("%H:%M:%S %d.%m.%Y")
+
+	stats.insert({"Username": username, "Score": score, "Mode": mode, "Date": cur_date, "Gold": gold, "Playtime": playtime, "IsWin": is_win})
+	return "[OK]: Stats recorded on User %s" % username
+
+
+def get_stats(username):
+	user_stats = stats.find({"Username": username})
+	if user_stats == None:
+		return "{}"
+
+	result = []
+	for stat in user_stats:
+		new_stat = { key: stat[key] for key in keys}
+		result.append(new_stat)
+	return json.dumps( result )
+
+
+if __name__=="__main__":
+	print(get_stats("Hard"))
+

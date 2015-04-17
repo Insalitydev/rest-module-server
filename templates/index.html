@@ -7,13 +7,13 @@
 	<title>Генератор названий</title>
 
 	<style type="text/css">
-	#Text {
+	.Text {
 		margin-top: 50px;
 		text-align: center;
 		color:#8c8c8c;
 		white-space: pre-wrap;
 	}
-	#Text::first-line {
+	.Text::first-line {
 		color: #ececec;
 	}
 	#Title{
@@ -39,8 +39,14 @@
 				<button type="button" class="btn btn-default">Location</button>
 			</div>
 
-			<h1><div id="Text">Нажми кнопку выше!</div></h1>
+			<h1><div class="Text">Нажми кнопку выше!</div></h1>
+			<div class="navbar-fixed-bottom Text">
+				<!-- <div class="navbar-inner"> -->
+					Some
+				<!-- </div> -->
+			</div>
 		</div>
+
 	</div>
 
 	<script>
