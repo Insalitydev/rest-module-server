@@ -27,5 +27,5 @@ def setup_routes(flask_app):
 
 	user_view = UserAPI.as_view(settings.MODULE_ROUTE)
 	flask_app.add_url_rule("/%s" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET",])
-	flask_app.add_url_rule("/%s/" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET",])
+#	flask_app.add_url_rule("/%s/" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET",])
 	flask_app.add_url_rule("/%s/<string:tag>" % settings.MODULE_ROUTE, view_func=user_view, methods=["GET", ])

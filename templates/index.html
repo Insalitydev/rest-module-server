@@ -52,10 +52,7 @@
 				phrases.splice(0, 0, data);
 				phrases = phrases.slice(0, 7);
 
-				new_phrases = phrases.slice();
-				new_phrases[0] = new_phrases[0];
-
-				$("#Text").text(new_phrases.join("\n\n"));
+				$("#Text").text(phrases.join("\n\n"));
 			});
 		});
 	</script>
