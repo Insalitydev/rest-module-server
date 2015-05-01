@@ -4,15 +4,22 @@
 Модуль для получения и редактирования слов (изменения падежей и окончаний)
 '''
 
+import os
 import json
-from . import Tags
 import codecs
 import random
 import pymorphy2
-import os
+if __name__=="__main__":
+	import Tags
+else:
+	from . import Tags
+
 
 cur_dir = os.path.dirname(__file__)
-DATADIR = cur_dir + "/data"
+if (cur_dir == ""):
+	cur_dir = "."
+
+DATADIR = "./data"
 morph = pymorphy2.MorphAnalyzer()
 
 def get_noun(tag=None):
@@ -59,10 +66,10 @@ def get_addon(tag=None):
 	return addons[random.randint(0, len(addons) - 1)]
 
 def open_json(filename):
-	f = codecs.open(DATADIR + "/" + filename, 'r', encoding='utf8')
+	f = codecs.open(cur_dir + "/" + DATADIR + "/" + filename, 'r', encoding='utf8')
 	f_data = f.read()
-	return json.loads(f_data)
 	f.close()
+	return json.loads(f_data)
 
 def stem_noun(noun):
 	max_chars = 7
