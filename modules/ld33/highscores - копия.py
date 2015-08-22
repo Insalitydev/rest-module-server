@@ -15,8 +15,8 @@ else:
 
 
 def get_connection_records():
-	client = pymongo.MongoClient("mongodb://%s:%s@ds029630.mongolab.com:29630/ludumdare32" % (USERNAME, PASSWORD))
-	db = client.ludumdare32
+	client = pymongo.MongoClient("mongodb://%s:%s@ds059722.mongolab.com:59722/ludumdare33" % (USERNAME, PASSWORD))
+	db = client.ludumdare33
 	records = db['records']
 	return records
 
@@ -53,6 +53,7 @@ def send_score(username, score, mode, key):
 		records.insert({"Username": username, "Score": score, "Mode": mode, "Date": cur_date})
 		return "[OK]: Score created on User %s" % username
 
+
 def get_score(username, mode):
 	rec = records.find_one({"Username": username, "Mode": mode})
 	if rec == None:
@@ -60,6 +61,7 @@ def get_score(username, mode):
 
 	new_rec = { key: rec[key] for key in keys}
 	return json.dumps( new_rec )
+
 
 def get_top(mode):
 	top = records.find({ "Mode": mode }).sort("Score", -1)

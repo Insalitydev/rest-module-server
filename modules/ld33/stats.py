@@ -15,8 +15,8 @@ else:
 
 
 def get_connection_stats():
-	client = pymongo.MongoClient("mongodb://%s:%s@ds029630.mongolab.com:29630/ludumdare32" % (USERNAME, PASSWORD))
-	db = client.ludumdare32
+	client = pymongo.MongoClient("mongodb://%s:%s@ds059722.mongolab.com:59722/ludumdare33" % (USERNAME, PASSWORD))
+	db = client.ludumdare33
 	stats = db['stats']
 	return stats
 
@@ -59,6 +59,24 @@ def get_stats(username):
 		new_stat = { key: stat[key] for key in keys}
 		result.append(new_stat)
 	return json.dumps( result )
+
+def get_overall_stats():
+	time_total = 0
+	coin_total = 0
+	play_times = 0
+	win_times = 0
+
+	all_stats = stats.find();
+	for stat in all_stats:
+		time_total += stat["Playtime"]
+		coin_total += stat["Gold"]
+		play_times += 1
+		if (stat["IsWin"]):
+			win_times += 1
+
+	ctx = {"time_total" : time_total, "coin_total": coin_total, "play_times": play_times, "win_times": win_times,
+			"coin_average": (int)(coin_total/play_times), "time_average": (int)(time_total/play_times)}
+	return ctx
 
 
 if __name__=="__main__":

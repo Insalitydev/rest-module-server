@@ -2,7 +2,7 @@
 
 import json
 import logging
-from flask import request
+from flask import request, render_template
 from flask.views import MethodView
 from . import settings, highscores, stats
 
@@ -47,6 +47,16 @@ class StatsAPI(MethodView):
 		send_stats = stats.send_stats(data["Username"], data["Score"], data["Mode"], data["Gold"], data["Playtime"], data["IsWin"], data["Key"])
 		return send_stats
 
+class InfoAPI(MethodView):
+	def get(self):
+		ctx = {}
+		ctx.update({"highscores": json.loads(highscores.get_top(0))})
+		ctx.update(stats.get_overall_stats())
+
+		print(ctx)
+		return render_template('info.html', ctx=ctx)
+
+
 
 def setup_routes(flask_app):
 	logging.info("Start setup module %s" % settings.MODULE_NAME)
@@ -61,3 +71,7 @@ def setup_routes(flask_app):
 	flask_app.add_url_rule("/%s/stats" % settings.MODULE_ROUTE, view_func=stats_view, methods=["GET", "POST",])
 	flask_app.add_url_rule("/%s/stats/" % settings.MODULE_ROUTE, view_func=stats_view, methods=["GET", "POST",])
 	flask_app.add_url_rule("/%s/stats/<string:username>" % settings.MODULE_ROUTE, view_func=stats_view, methods=["GET", ])
+
+	info_view = InfoAPI.as_view(settings.MODULE_ROUTE+"/info")
+	flask_app.add_url_rule("/%s/info" % settings.MODULE_ROUTE, view_func=info_view, methods=["GET",])
+	flask_app.add_url_rule("/%s/info/" % settings.MODULE_ROUTE, view_func=info_view, methods=["GET",])
