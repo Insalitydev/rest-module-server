@@ -48,13 +48,20 @@ class StatsAPI(MethodView):
 		return send_stats
 
 class InfoAPI(MethodView):
-	def get(self):
+	def get(self, username=None):
 		ctx = {}
-		ctx.update({"highscores": json.loads(highscores.get_top(0))})
-		ctx.update(stats.get_overall_stats())
+		if username is None:
+			ctx.update({"highscores": json.loads(highscores.get_top(0))})
+			ctx.update(stats.get_overall_stats())
+			return render_template('info.html', ctx=ctx)
+		else:
+			st = stats.get_overall_user_stats(username);
+			if (st == "Empty"):
+				return "[Error]: The username %s doesn't exist" % username
+			ctx.update(st)
+			return render_template('personal.html', ctx=ctx)
 
-		print(ctx)
-		return render_template('info.html', ctx=ctx)
+		
 
 
 
@@ -73,5 +80,6 @@ def setup_routes(flask_app):
 	flask_app.add_url_rule("/%s/stats/<string:username>" % settings.MODULE_ROUTE, view_func=stats_view, methods=["GET", ])
 
 	info_view = InfoAPI.as_view(settings.MODULE_ROUTE+"/info")
-	flask_app.add_url_rule("/%s/info" % settings.MODULE_ROUTE, view_func=info_view, methods=["GET",])
+	# flask_app.add_url_rule("/%s/info" % settings.MODULE_ROUTE, view_func=info_view, methods=["GET",])
 	flask_app.add_url_rule("/%s/info/" % settings.MODULE_ROUTE, view_func=info_view, methods=["GET",])
+	flask_app.add_url_rule("/%s/info/<string:username>" % settings.MODULE_ROUTE, view_func=info_view, methods=["GET",])

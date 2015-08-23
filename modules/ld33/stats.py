@@ -60,6 +60,27 @@ def get_stats(username):
 		result.append(new_stat)
 	return json.dumps( result )
 
+def get_overall_user_stats(username):
+	all_stats = json.loads(get_stats(username))
+	if (len(all_stats) == 0):
+		return "Empty";
+
+	time_total = 0
+	coin_total = 0
+	play_times = 0
+	win_times = 0
+
+	for stat in all_stats:
+		time_total += stat["Playtime"]
+		coin_total += stat["Gold"]
+		play_times += 1
+		if (stat["IsWin"]):
+			win_times += 1
+
+	ctx = {"time_total" : time_total, "coin_total": coin_total, "play_times": play_times, "win_times": win_times,
+			"coin_average": (int)(coin_total/play_times), "time_average": (int)(time_total/play_times), "Username": username}
+	return ctx
+
 def get_overall_stats():
 	time_total = 0
 	coin_total = 0
@@ -73,6 +94,7 @@ def get_overall_stats():
 		play_times += 1
 		if (stat["IsWin"]):
 			win_times += 1
+
 
 	ctx = {"time_total" : time_total, "coin_total": coin_total, "play_times": play_times, "win_times": win_times,
 			"coin_average": (int)(coin_total/play_times), "time_average": (int)(time_total/play_times)}
