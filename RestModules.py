@@ -9,7 +9,7 @@ l - записывает все логи в файл log/RestModules.log вме�
 import os
 import sys
 import logging
-from flask import Flask, request
+from flask import Flask, request, url_for
 from flask.views import MethodView
 
 
@@ -19,7 +19,7 @@ if (cur_dir == ""):
 
 modules_dir = "modules"
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="")
 
 # ==============
 # FLASK SETTINGS
@@ -36,6 +36,10 @@ def not_allowed(e):
 def log():
 	if (len(request.data) > 0):
 		logging.info("%s: %s, Data: %s" % (request.method, request.url, request.data))
+
+@app.route('/crossdomain.xml')
+def crossdomain():
+	return app.send_static_file("static/crossdomain.xml")
 
 
 if __name__ == "__main__":
@@ -75,5 +79,4 @@ if __name__ == "__main__":
 
 	routes.remove("static")
 	logging.info("Loaded routes: %s" % ", ".join(routes))
-
 	app.run(host='0.0.0.0', debug=False)
