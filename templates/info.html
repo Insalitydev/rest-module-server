@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-	<title>Beats of Shadow</title>
+	<title>Beats of Nightmare</title>
 
 	<style type="text/css">
 		body {background: url("http://subtlepatterns.com/patterns/escheresque_ste.png")}
@@ -64,15 +64,15 @@
 			<div id="stats_wrapper">
 				<br><br>
 				Total Time Played: <span class="stats"> {{ (ctx.time_total/60)|round(1) }} </span> minutes <br>
-				Total Coin Collected: <span class="stats"> {{ ctx.coin_total }} </span> coins <br>
+				Total Orbs Collected: <span class="stats"> {{ ctx.coin_total }} </span> orbs <br>
 
 				<br>
 				Game started <span class="stats"> {{ ctx.play_times }} </span> times <br>
 				Game completed <span class="stats"> {{ ctx.win_times }} </span> times <br>
 
 				<br>
-				Average coins per game: <span class="stats"> {{ ctx.coin_average }} </span> coins <br>
-				Average Time per game: <span class="stats"> {{ ctx.time_average }} </span> seconds <br>
+				Average orbs per game: <span class="stats"> {{ ctx.coin_average }} </span> orbs <br>
+				Average time per game: <span class="stats"> {{ ctx.time_average }} </span> seconds <br>
 			</div>
 		</div>
 	</div>
