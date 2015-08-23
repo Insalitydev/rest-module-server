@@ -11,7 +11,7 @@ class HighscoreAPI(MethodView):
 		if username is None:
 			return highscores.get_top(mode)
 		else:
-			return highscores.get_score(username, mode)
+			return highscores.get_score(username.strip(), mode)
 	def post(self):
 		keys = ["Username", "Score", "Mode", "Key"]
 		try:
@@ -32,7 +32,7 @@ class StatsAPI(MethodView):
 		if username is None:
 			return "[Error]: No specified username"
 		else:
-			return stats.get_stats(username)
+			return stats.get_stats(username.strip())
 	def post(self):
 		keys = ["Username", "Score", "Mode", "Gold", "Playtime", "IsWin", "Key"]
 		try:
@@ -55,6 +55,7 @@ class InfoAPI(MethodView):
 			ctx.update(stats.get_overall_stats())
 			return render_template('info.html', ctx=ctx)
 		else:
+			username = username.strip()
 			st = stats.get_overall_user_stats(username);
 			if (st == "Empty"):
 				return "[Error]: The username %s doesn't exist" % username
