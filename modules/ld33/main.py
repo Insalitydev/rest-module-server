@@ -55,8 +55,7 @@ class InfoAPI(MethodView):
 			ctx.update(stats.get_overall_stats())
 			return render_template('info.html', ctx=ctx)
 		else:
-			username = username.strip()
-			st = stats.get_overall_user_stats(username);
+			st = stats.get_overall_user_stats(username.strip());
 			if (st == "Empty"):
 				return "[Error]: The username %s doesn't exist" % username
 			ctx.update(st)

@@ -32,10 +32,10 @@ def send_score(username, score, mode, key):
 		(not type(mode) is int):
 		return "[Error]: Value type errors" 
 
-	username = username.strip();
 	# Need to assert key
 	if (key != hash_highscore(username, score, mode)):
 		return "[Error]: Wrong secret key"
+	username = username.strip()
 
 	if username == "": username = "Unnamed"
 

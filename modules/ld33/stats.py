@@ -35,13 +35,13 @@ def send_stats(username, score, mode, gold, playtime, is_win, key):
 		(not type(is_win) is int):
 		return "[Error]: Value type errors" 
 
-	username = username.strip()
 	# Need to assert key
 	if (key != hash_stats(username, score, mode, gold, playtime, is_win)):
 		return "[Error]: Wrong secret key"
 
 
 	if username == "": username = "Unnamed"
+	username = username.strip()
 
 	# Posting scores
 	cur_date = datetime.now().strftime("%H:%M:%S %d.%m.%Y")
